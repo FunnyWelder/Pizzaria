@@ -76,8 +76,8 @@ public:
         int n = pizzas.size();
         for(int i = 0; i < n; i++)
         {
-            cout << "Pizza name: " << pizzas[i]->getName();
-            cout << "Pizza description: " << pizzas[i]->getDescription();
+            cout << "Pizza name: " << pizzas[i]->getName() << endl;;
+            cout << "Pizza description: " << pizzas[i]->getDescription() << endl;;
             cout << "Pizza cost: " << pizzas[i]->getPrice() << endl;
             cout << "Cheeseness: " << pizzas[i]->getCheeze() << endl;
             cout << "Saltiness: "  << pizzas[i]->getSalami() << endl;
@@ -345,6 +345,7 @@ public:
 // Я не понял как сделать процедуру с меню пицц
 
 int main() {
+    setlocale( LC_ALL,"Russian" );
     Order order;
     Pizza_1 P1(1);
     P1.addCheeze();
