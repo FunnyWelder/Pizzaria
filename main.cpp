@@ -47,46 +47,21 @@ public:
         }
     }
 
-    void addCheeze(){
-        Cheeze++;
+    void addCheeze(unsigned int cheese){
+        Cheeze = Cheeze + cheese;
     }
 
     unsigned int getCheeze() const {
         return Cheeze;
     };
 
-    void addSalami(){
-        Salami++;
+    void addSalami(unsigned int salami){
+        Salami = Salami + salami;
     }
 
     unsigned int getSalami() const {
         return Salami;
     };
-};
-
-class Order {
-    vector<const Pizza *> pizzas;
-public:
-    void add(const Pizza *pizza) {
-        pizzas.push_back(pizza);
-    }
-
-    void print() {
-        unsigned int Account = 0;
-        int n = pizzas.size();
-        for(int i = 0; i < n; i++)
-        {
-            cout << "Pizza name: " << pizzas[i]->getName() << endl;;
-            cout << "Pizza description: " << pizzas[i]->getDescription() << endl;;
-            cout << "Pizza cost: " << pizzas[i]->getPrice() << endl;
-            cout << "Cheeseness: " << pizzas[i]->getCheeze() << endl;
-            cout << "Saltiness: "  << pizzas[i]->getSalami() << endl;
-            cout << "Size: "       << pizzas[i]->getSize() << endl;
-            cout << endl;
-            Account += pizzas[i]->getCost();
-        }
-        cout << "Account: " << Account << " $" << endl;
-    }
 };
 
 class Pizza_1 : public Pizza {
@@ -342,24 +317,187 @@ public:
     }
 };
 
-// Я не понял как сделать процедуру с меню пицц
+class Order {
+    vector<const Pizza*> pizzas;
+public:
+    void add(const Pizza* pizza) {
+        pizzas.push_back(pizza);
+    }
+
+    void print() {
+        unsigned int Account = 0;
+        int n = pizzas.size();
+        for(int i = 0; i < n; i++)
+        {
+            cout << "Pizza name: " << pizzas[i].getName() << endl;
+            cout << "Pizza description: " << pizzas[i].getDescription() << endl;
+
+            unsigned int cheese;
+            cout << "Сколько раз хотите добавить сыра? "; cin >> cheese;
+            pizzas[i].addCheeze(cheese);
+            cout << "Cheeseness: " << pizzas[i].getCheeze() << endl;
+
+            unsigned int salami;
+            cout << "Сколько раз хотите добавить салями? "; cin >> salami;
+            pizzas[i].addSalami(salami);
+            cout << "Salaminess: "  << pizzas[i].getSalami() << endl;
+
+            cout << "Pizza cost: " << pizzas[i].getPrice() << endl;
+            cout << "Size: "       << pizzas[i].getSize() << endl;
+            cout << endl;
+            Account += pizzas[i].getCost();
+        }
+        cout << "Account: " << Account << " $" << endl;
+    }
+};
+
+class Menu {
+public:
+    static void print() {
+        cout << "Menu:" << endl;
+        Pizza_1 pizza_1(1); cout << "[1] " << pizza_1.getName() << ' ' << pizza_1.getPrice() << endl; cout << pizza_1.getDescription() << endl << endl;
+        Pizza_2 pizza_2(1); cout << "[2] " <<  pizza_2.getName() << ' ' << pizza_2.getPrice() << endl; cout << pizza_2.getDescription() << endl << endl;
+        Pizza_3 pizza_3(1); cout << "[3] " <<  pizza_3.getName() << ' ' << pizza_3.getPrice() << endl; cout << pizza_3.getDescription() << endl << endl;
+        Pizza_4 pizza_4(1); cout << "[4] " << pizza_4.getName() << ' ' << pizza_4.getPrice() << endl; cout << pizza_4.getDescription() << endl << endl;
+        Pizza_5 pizza_5(1); cout << "[5] " << pizza_5.getName() << ' ' << pizza_5.getPrice() << endl; cout << pizza_5.getDescription() << endl << endl;
+        Pizza_6 pizza_6(1); cout << "[6] " << pizza_6.getName() << ' ' << pizza_6.getPrice() << endl; cout << pizza_6.getDescription() << endl << endl;
+        Pizza_7 pizza_7(1); cout << "[7] " << pizza_7.getName() << ' ' << pizza_7.getPrice() << endl; cout << pizza_7.getDescription() << endl << endl;
+        Pizza_8 pizza_8(1); cout << "[8] " << pizza_8.getName() << ' ' << pizza_8.getPrice() << endl; cout << pizza_8.getDescription() << endl << endl;
+        Pizza_9 pizza_9(1); cout << "[9] " << pizza_9.getName() << ' ' << pizza_9.getPrice() << endl; cout << pizza_9.getDescription() << endl << endl;
+        Pizza_10 pizza_10(1); cout << "[10] " << pizza_10.getName() << ' ' << pizza_10.getPrice() << endl; cout << pizza_10.getDescription() << endl << endl;
+    }
+
+    static void print_sizes(){
+        Pizza_1 pizza1S(1);
+        Pizza_1 pizza1M(2);
+        Pizza_1 pizza1L(3);
+        cout << "[1] " << pizza1S.getSize() << endl;
+        cout << "[2] " << pizza1M.getSize() << endl;
+        cout << "[3] " << pizza1L.getSize() << endl;
+    }
+};
 
 int main() {
     setlocale( LC_ALL,"Russian" );
     Order order;
-    Pizza_1 P1(1);
-    P1.addCheeze();
-    P1.addSalami();
-    P1.addSalami();
+    Menu::print();
+    Menu::print_sizes();
 
-    Pizza_7 P2(3);
-
-    Pizza_9 P3(2);
-    P3.addCheeze();
-
-    order.add(&P1);
-    order.add(&P2);
-    order.add(&P3);
+    unsigned short int n = 0;
+    do {
+        cout << "Пожалуйста, выберите номер пиццы, которую вы хотите заказать. Если не хотите заказывать, то выберите номер 0: "; cin >> n; cout << endl;
+        if (n > 10) {
+            cout << "Извините пиццы с таким номером нет.";
+        }
+        if (n != 0) {
+            unsigned short int size = 0;
+            while ((size == 0) || (size > 3)) {
+                cout << "Пожалуйста, выберите номер размера пиццы: ";
+                cin >> size;
+                cout << endl;
+                if ((size == 0) || (size > 10)) {
+                    cout << "Извините размера пиццы с таким номером нет.";
+                }
+            }
+            switch (n) { //////////////////////////// Здесь проблема с создание пиццы: new Pizza_1(1) так может создать, order.add(new Pizza_1(1)) а так нет, потому что vector<Pizza> pizzas - не константа
+                            ///////////////////////// Либо vector<const Pizza*> pizzas, тогда можно добавить, но нельзя использовать pizzas[i].addCheeze(cheese), т.к константа
+                case 1:
+                    switch (size) {
+                        case 1:
+                            order.add(new Pizza_1(1));
+                            break;
+                        case 2:
+                            order.add(new Pizza_1(2));
+                            break;
+                        case 3:
+                            order.add(new Pizza_1(3));
+                            break;
+                    }
+                    break;
+                case 2:
+                    switch (size) {
+                        case 1:
+                            order.add(new Pizza_2(1));
+                        case 2:
+                            order.add(new Pizza_2(2));
+                        case 3:
+                            order.add(new Pizza_2(3));
+                    }
+                case 3:
+                    switch (size) {
+                        case 1:
+                            order.add(new Pizza_3(1));
+                        case 2:
+                            order.add(new Pizza_3(2));
+                        case 3:
+                            order.add(new Pizza_3(3));
+                    }
+                case 4:
+                    switch (size) {
+                        case 1:
+                            order.add(new Pizza_4(1));
+                        case 2:
+                            order.add(new Pizza_4(2));
+                        case 3:
+                            order.add(new Pizza_4(3));
+                    }
+                case 5:
+                    switch (size) {
+                        case 1:
+                            order.add(new Pizza_5(1));
+                        case 2:
+                            order.add(new Pizza_5(2));
+                        case 3:
+                            order.add(new Pizza_5(3));
+                    }
+                case 6:
+                    switch (size) {
+                        case 1:
+                            order.add(new Pizza_6(1));
+                        case 2:
+                            order.add(new Pizza_6(2));
+                        case 3:
+                            order.add(new Pizza_6(3));
+                    }
+                case 7:
+                    switch (size) {
+                        case 1:
+                            order.add(new Pizza_7(1));
+                        case 2:
+                            order.add(new Pizza_7(2));
+                        case 3:
+                            order.add(new Pizza_7(3));
+                    }
+                case 8:
+                    switch (size) {
+                        case 1:
+                            order.add(new Pizza_8(1));
+                        case 2:
+                            order.add(new Pizza_8(2));
+                        case 3:
+                            order.add(new Pizza_8(3));
+                    }
+                case 9:
+                    switch (size) {
+                        case 1:
+                            order.add(new Pizza_9(1));
+                        case 2:
+                            order.add(new Pizza_9(2));
+                        case 3:
+                            order.add(new Pizza_9(3));
+                    }
+                case 10:
+                    switch (size) {
+                        case 1:
+                            order.add(new Pizza_10(1));
+                        case 2:
+                            order.add(new Pizza_10(2));
+                        case 3:
+                            order.add(new Pizza_10(3));
+                    }
+            }
+        }
+    } while (n > 10);
 
     order.print();
 
